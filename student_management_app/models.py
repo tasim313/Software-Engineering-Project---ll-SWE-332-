@@ -5,6 +5,13 @@ from django.dispatch import receiver
 # Create your models here.
 
 
+class SessionYearModel(models.Model):
+    id = models.AutoField(primary_key=True)
+    session_start_year = models.DateField()
+    session_end_year = models.DateField()
+    object = models.Manager()
+
+
 class CustomUser(AbstractUser):
     user_type_data = ((1, "Admin"), (2, "Teacher"), (3, "Student"))
     user_type = models.CharField(default=1, choices=user_type_data, max_length=10)

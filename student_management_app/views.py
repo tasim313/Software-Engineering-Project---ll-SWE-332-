@@ -14,7 +14,7 @@ def showDemoPage(request):
 
 
 def ShowLoginPage(request):
-    return render(request,"login_page.html")
+    return render(request, "login_page.html")
 
 
 def doLogin(request):
