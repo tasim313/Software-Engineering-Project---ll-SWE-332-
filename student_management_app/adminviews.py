@@ -17,7 +17,7 @@ def add_teacher(request):
 
 
 def add_teacher_save(request):
-    if request.method!= "POST":
+    if request.method != "POST":
         return HttpResponse("Method Not Allowed")
     else:
         first_name = request.POST.get("first_name")
@@ -42,7 +42,7 @@ def add_course(request):
 
 
 def add_course_save(request):
-    if request.method!= "POST":
+    if request.method != "POST":
         return HttpResponse("Method Not Allowed")
     else:
         course = request.POST.get("course")
@@ -57,8 +57,8 @@ def add_course_save(request):
 
 
 def add_student(request):
-    form=AddStudentForm()
-    return render(request,"admin_templates/add_student_template.html",{"form":form})
+    form = AddStudentForm()
+    return render(request, "admin_templates/add_student_template.html", {"form": form})
 
 
 def add_student_save(request):
@@ -84,7 +84,8 @@ def add_student_save(request):
             profile_pic_url = fs.url(filename)
 
             try:
-                user = CustomUser.objects.create_user(username=username,password=password,email=email,last_name=last_name,first_name=first_name,user_type=3)
+                user = CustomUser.objects.create_user(username=username, password=password, email=email,
+                                                      last_name=last_name, first_name=first_name, user_type=3)
                 user.students.address = address
                 course_obj = Courses.objects.get(id=course_id)
                 user.students.course_id = course_obj
@@ -100,13 +101,13 @@ def add_student_save(request):
                 return HttpResponseRedirect(reverse("add_student"))
         else:
             form = AddStudentForm(request.POST)
-            return render(request, "hod_template/add_student_template.html", {"form": form})
+            return render(request, "admin_templates/add_student_template.html", {"form": form})
 
 
 def add_subject(request):
     courses = Courses.objects.all()
-    staffs = CustomUser.objects.filter(user_type=2)
-    return render(request, "hod_template/add_subject_template.html", {"staffs": staffs, "courses": courses})
+    Teachers = CustomUser.objects.filter(user_type=2)
+    return render(request, "admin_templates/add_subject_template.html", {"Teachers": Teachers, "courses": courses})
 
 
 def add_subject_save(request):
@@ -116,11 +117,11 @@ def add_subject_save(request):
         subject_name = request.POST.get("subject_name")
         course_id = request.POST.get("course")
         course = Courses.objects.get(id=course_id)
-        staff_id = request.POST.get("staff")
-        staff = CustomUser.objects.get(id=staff_id)
+        teacher_id = request.POST.get("Teachers")
+        Teachers = CustomUser.objects.get(id=teacher_id)
 
         try:
-            subject = Subjects(subject_name=subject_name, course_id=course, staff_id=staff)
+            subject = Subjects(subject_name=subject_name, course_id=course, teacher_id=Teachers)
             subject.save()
             messages.success(request, "Successfully Added Subject")
             return HttpResponseRedirect(reverse("add_subject"))
@@ -135,12 +136,12 @@ def manage_teacher(request):
 
 
 def manage_student(request):
-    students=Students.objects.all()
+    students = Students.objects.all()
     return render(request, "admin_templates/manage_student_template.html", {"students": students})
 
 
 def manage_course(request):
-    courses=Courses.objects.all()
+    courses = Courses.objects.all()
     return render(request, "admin_templates/manage_course_template.html", {"courses": courses})
 
 
@@ -196,7 +197,7 @@ def edit_student(request, student_id):
     form.fields['sex'].initial = student.gender
     form.fields['session_start'].initial = student.session_start_year
     form.fields['session_end'].initial = student.session_end_year
-    return render(request, "hod_template/edit_student_template.html",
+    return render(request, "admin_templates/edit_student_template.html",
                   {"form": form, "id": student_id, "username": student.admin.username})
 
 
@@ -260,12 +261,12 @@ def edit_student_save(request):
                           {"form": form, "id": student_id, "username": student.admin.username})
 
 
-def edit_subject(request,subject_id):
+def edit_subject(request, subject_id):
     subject = Subjects.objects.get(id=subject_id)
     courses = Courses.objects.all()
-    staffs = CustomUser.objects.filter(user_type=2)
+    Teachers = CustomUser.objects.filter(user_type=2)
     return render(request, "hod_template/edit_subject_template.html",
-                  {"subject": subject, "staffs": staffs, "courses": courses, "id": subject_id})
+                  {"subject": subject, "Teachers": Teachers, "courses": courses, "id": subject_id})
 
 
 def edit_subject_save(request):
@@ -274,14 +275,14 @@ def edit_subject_save(request):
     else:
         subject_id = request.POST.get("subject_id")
         subject_name = request.POST.get("subject_name")
-        staff_id = request.POST.get("staff")
+        teacher_id = request.POST.get("Teachers")
         course_id = request.POST.get("course")
 
         try:
             subject = Subjects.objects.get(id=subject_id)
             subject.subject_name = subject_name
-            staff = CustomUser.objects.get(id=staff_id)
-            subject.staff_id = staff
+            Teachers = CustomUser.objects.get(id=teacher_id)
+            subject.teacher_id = Teachers
             course = Courses.objects.get(id=course_id)
             subject.course_id = course
             subject.save()
