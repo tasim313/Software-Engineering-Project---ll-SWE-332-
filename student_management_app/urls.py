@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from . import adminviews
+from . import adminviews, teacherviews, Studentviews
 urlpatterns = [
       path('demo', views.showDemoPage),
       path('', views.ShowLoginPage, name="show_login"),
@@ -19,4 +19,10 @@ urlpatterns = [
       path('manage_subject', adminviews.manage_subject, name="manage_subject"),
       path('edit_teacher/<str:teacher_id>', adminviews.edit_teacher, name="edit_teacher"),
       path('edit_teacher_save', adminviews.edit_teacher_save, name="edit_teacher_save"),
+
+      # Teacher urls
+      path('teacher_home', teacherviews.teacher_home, name="teacher_home"),
+
+      # student urls
+      path('student_home', Studentviews.student_home, name="student_home"),
 ]
