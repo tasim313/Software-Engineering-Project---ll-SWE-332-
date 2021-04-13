@@ -81,9 +81,9 @@ DATABASES = {
        # 'ENGINE': 'django.db.backends.sqlite3',
        # 'NAME': BASE_DIR / 'db.sqlite3',
          'ENGINE': 'django.db.backends.mysql',
-          'NAME': 'students_management',
-          'USER': 'students_managements',
-          'PASSWORD': 'students_management',
+          'NAME': 'students_managements_system',
+          'USER': 'students_managements_system',
+          'PASSWORD': 'students_managements_system',
           'HOST': '127.0.0.1',
           'PORT': '3306',
     }
@@ -135,3 +135,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 AUTH_USER_MODEL = 'student_management_app.CustomUser'
 AUTHENTICATION_BACKENDS = ['student_management_app.EmailBackEnd.EmailBackEnd']
+
+
+EMAIL_BACKEND="django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH=os.path.join(BASE_DIR,"sent_mails")
+

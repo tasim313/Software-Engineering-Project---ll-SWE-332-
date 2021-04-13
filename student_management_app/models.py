@@ -35,6 +35,7 @@ class Teachers(models.Model):
     email = models.EmailField(max_length=255)
     password = models.CharField(max_length=255)
     address = models.TextField()
+    fcm_token = models.TextField(default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
@@ -65,13 +66,13 @@ class Students(models.Model):
     email = models.EmailField(max_length=255)
     password = models.CharField(max_length=255)
     gender = models.CharField(max_length=255)
-    profile_pic = models.ImageField()
+    profile_pic = models.FileField()
     address = models.TextField()
     course_id = models.ForeignKey(Courses, on_delete=models.DO_NOTHING)
-    session_start_year = models.DateField()
-    session_end_year = models.DateField()
+    session_year_id = models.ForeignKey(SessionYearModel, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
+    fcm_token = models.TextField(default="")
     objects = models.Manager()
 
 
@@ -80,6 +81,7 @@ class Attendance(models.Model):
     subject_id = models.ForeignKey(Subjects, on_delete=models.DO_NOTHING)
     attendance_date = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    session_year_id = models.ForeignKey(SessionYearModel, on_delete=models.CASCADE)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
@@ -196,3 +198,4 @@ def save_user_profile(sender, instance, **kwargs):
         instance.Teachers.save()
     if instance.user_type == 3:
         instance.students.save()
+
